@@ -30,6 +30,34 @@ We feed the inputs to the network and optimize the weights:
 
 4. Finally, I tested the network on the test data. I wrote a Python function to generate HTML output showing each test image and its classification scores. To see the classification scores, I used nn.functional.softmax(outputs)
 
+I used Compute Canada resources for computations using the following submission lines:
+
+!/bin/bash
+
+SBATCH --cpus-per-task=4      
+
+SBATCH --mem=100G   
+
+SBATCH --time=0-01:00
+
+SBATCH --output=%N-%j.out
+
+module load python/3.6
+
+virtualenv --no-download $SLURM_TMPDIR/env
+
+source $SLURM_TMPDIR/env/bin/activate
+
+pip install torch --no-index
+
+pip install torch torchvision torchtext torchaudio --no-index
+
+pip install --upgrade matplotlib 
+
+python cifar_finetune.py
+
+
+After the trained model saved, I did comment out the training part of the code. So If you submit the job only the test will run which performs classification on only 100 images and generates an HTML output file.
 
 
 
